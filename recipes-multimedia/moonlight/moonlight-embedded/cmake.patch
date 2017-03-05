@@ -1,0 +1,24 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 00dd129..77f4bc3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -145,4 +145,4 @@ add_subdirectory(docs)
+ 
+ install(TARGETS moonlight DESTINATION ${CMAKE_INSTALL_BINDIR})
+ install(DIRECTORY mappings DESTINATION ${CMAKE_INSTALL_DATADIR}/moonlight)
+-install(FILES moonlight.conf DESTINATION ${CMAKE_INSTALL_SYSCONFDIR})
++install(FILES moonlight.conf DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/moonlight/)
+diff --git a/libgamestream/CMakeLists.txt b/libgamestream/CMakeLists.txt
+index 97ded6f..4a46b7f 100644
+--- a/libgamestream/CMakeLists.txt
++++ b/libgamestream/CMakeLists.txt
+@@ -18,9 +18,6 @@ add_library(gamestream SHARED ${GAMESTREAM_SRC_LIST})
+ set_property(TARGET gamestream PROPERTY C_STANDARD 99)
+ target_link_libraries(gamestream moonlight-common)
+ 
+-set_target_properties(gamestream PROPERTIES SOVERSION 0 VERSION ${MOONLIGHT_VERSION})
+-set_target_properties(moonlight-common PROPERTIES SOVERSION 0 VERSION ${MOONLIGHT_VERSION})
+-
+ target_include_directories(gamestream PRIVATE ../third_party/moonlight-common-c/src ../third_party/h264bitstream ${AVAHI_INCLUDE_DIRS} ${LIBUUID_INCLUDE_DIRS})
+ target_include_directories(moonlight-common PRIVATE  ${ENET_INCLUDE_DIRS})
+ target_link_libraries(gamestream ${CURL_LIBRARIES} ${OPENSSL_LIBRARIES} ${EXPAT_LIBRARIES} ${AVAHI_LIBRARIES} ${LIBUUID_LIBRARIES})

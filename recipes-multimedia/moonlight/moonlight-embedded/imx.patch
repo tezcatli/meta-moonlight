@@ -1,0 +1,27 @@
+diff --git a/src/video/imx.c b/src/video/imx.c
+index 5e6db03..6c1c69a 100644
+--- a/src/video/imx.c
++++ b/src/video/imx.c
+@@ -35,6 +35,7 @@
+ #include <sys/ioctl.h>
+ 
+ #include <linux/ioctl.h>
++#include <linux/types.h>
+ #include <linux/mxc_v4l2.h>
+ #include <linux/mxcfb.h>
+ #include <linux/version.h>
+@@ -213,10 +214,10 @@ static void decoder_renderer_setup(int videoFormat, int width, int height, int r
+   icrop.c.top = 0;
+   icrop.c.width = width;
+   icrop.c.height =  height;
+-  err = ioctl(fd, VIDIOC_S_INPUT_CROP, &icrop);
+-  if (err < 0) {
+-    err_msg("VIDIOC_S_INPUT_CROP failed\n");
+-    goto err;
++  res = ioctl(fd, VIDIOC_S_INPUT_CROP, &icrop);
++  if (res < 0) {
++    fprintf(stderr, "VIDIOC_S_INPUT_CROP failed\n");
++    exit(EXIT_FAILURE);
+   }
+ #endif
+ #endif

@@ -1,0 +1,73 @@
+diff --git a/arch/arm/mach-imx/mach-imx6q.c b/arch/arm/mach-imx/mach-imx6q.c
+index 945072f..bd09fb7 100644
+--- a/arch/arm/mach-imx/mach-imx6q.c
++++ b/arch/arm/mach-imx/mach-imx6q.c
+@@ -16,6 +16,7 @@
+ #include <linux/delay.h>
+ #include <linux/export.h>
+ #include <linux/init.h>
++#include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/irq.h>
+ #include <linux/irqchip.h>
+@@ -34,6 +35,7 @@
+ #include <linux/of_net.h>
+ #include <asm/mach/arch.h>
+ #include <asm/mach/map.h>
++#include <linux/perf/arm_pmu.h>
+ #include <asm/system_misc.h>
+ #include <linux/fec.h>
+ 
+@@ -164,9 +166,9 @@ static int ar8035_phy_fixup(struct phy_device *dev)
+ 	u16 val;
+ 
+ 	/*
+-	 * Disable SmartEEE and Enable 125MHz clock from 
++	 * Disable SmartEEE and Enable 125MHz clock from
+ 	 * CLK_25M on the AR8031.  This is fed in to the
+-	 * IMX6 on the ENET_REF_CLK (V22) pad. Also, 
++	 * IMX6 on the ENET_REF_CLK (V22) pad. Also,
+ 	 * introduce a tx clock delay.
+ 	 *
+ 	 * This is the same as is the AR8031 fixup.
+@@ -320,9 +322,40 @@ static void __init imx6q_axi_init(void)
+ 	}
+ }
+ 
++/*
++ * The PMU IRQ lines of all cores are muxed onto a single interrupt.
++ * Rotate the interrupt around the cores if the current CPU cannot
++ * figure out why the interrupt has been triggered.
++ */
++
++static irqreturn_t imx6q_pmu_handler(int irq, void *dev, irq_handler_t handler)
++{
++  irqreturn_t ret = handler(irq, dev);
++  int next;
++
++  if (ret == IRQ_NONE && num_online_cpus() > 1) {
++    next = cpumask_next(smp_processor_id(), cpu_online_mask);
++    if (next > nr_cpu_ids)
++      next = cpumask_next(-1, cpu_online_mask);
++    irq_set_affinity(irq, cpumask_of(next));
++  }
++
++  /*
++   * We should be able to get away with the amount of IRQ_NONEs we give,
++   * while still having the spurious IRQ detection code kick in if the
++   * interrupt really starts hitting spuriously.
++   */
++  return ret;
++}
++
++static struct arm_pmu_platdata imx6q_pmu_platdata = {
++  .handle_irq = imx6q_pmu_handler,
++};
++
+ /* Add auxdata to pass platform data */
+ static const struct of_dev_auxdata imx6q_auxdata_lookup[] __initconst = {
+ 	OF_DEV_AUXDATA("fsl,imx6q-fec", 0x02188000, NULL, &fec_pdata),
++  OF_DEV_AUXDATA("arm,cortex-a9-pmu", 0, "arm-pmu", &imx6q_pmu_platdata),
+ 	{ /* sentinel */ }
+ };
+ 

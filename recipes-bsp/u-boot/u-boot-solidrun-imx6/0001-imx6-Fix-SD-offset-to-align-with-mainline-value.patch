@@ -1,0 +1,47 @@
+diff --git a/include/configs/imx6_spl.h b/include/configs/imx6_spl.h
+index 2149d91..2e3991b 100644
+--- a/include/configs/imx6_spl.h
++++ b/include/configs/imx6_spl.h
+@@ -40,7 +40,7 @@
+ #define CONFIG_SPL_SATA_SUPPORT
+
+ #define CONFIG_SPL_MMC_SUPPORT
+-#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	84 /* offset 69KB */
++#define CONFIG_SYS_MMCSD_RAW_MODE_U_BOOT_SECTOR	138 /* offset 69KB */
+ #define CONFIG_SYS_MMCSD_RAW_MODE_KERNEL_SECTOR	0 /* offset 69KB */
+ #define CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTOR	0 /* offset 69KB */
+ #define CONFIG_SYS_MMCSD_RAW_MODE_ARGS_SECTORS	0 /* offset 69KB */
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index 9896e54..b7926ee 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -44,9 +44,11 @@
+  */
+ #if !defined(CONFIG_ARCH_SUPPORTS_OPTIMIZED_INLINING) || \
+     !defined(CONFIG_OPTIMIZE_INLINING) || (__GNUC__ < 4)
+-# define inline		inline		__attribute__((always_inline))
+-# define __inline__	__inline__	__attribute__((always_inline))
+-# define __inline	__inline	__attribute__((always_inline))
++
++/* XXX: check __GNUC_STDC_INLINE__, fix line length */
++# define inline		inline		__attribute__((always_inline)) __attribute__((__gnu_inline__))
++# define __inline__	__inline__	__attribute__((always_inline)) __attribute__((__gnu_inline__))
++# define __inline	__inline	__attribute__((always_inline)) __attribute__((__gnu_inline__))
+ #endif
+
+ #define __deprecated			__attribute__((deprecated))
+diff --git a/include/linux/compiler-gcc6.h b/include/linux/compiler-gcc6.h
+new file mode 100644
+index 0000000..e69de29
+diff --git a/arch/arm/cpu/armv7/config.mk b/arch/arm/cpu/armv7/config.mk
+index f0d9c04..660ad25 100644
+--- a/arch/arm/cpu/armv7/config.mk
++++ b/arch/arm/cpu/armv7/config.mk
+@@ -21,6 +21,7 @@ PLATFORM_RELFLAGS += $(PF_RELFLAGS_SLB_AT)
+ # SEE README.arm-unaligned-accesses
+ PF_NO_UNALIGNED := $(call cc-option, -mno-unaligned-access,)
+ PLATFORM_NO_UNALIGNED := $(PF_NO_UNALIGNED)
++PLATFORM_CPPFLAGS += $(PF_NO_UNALIGNED)
+
+ ifneq ($(CONFIG_IMX_CONFIG),)
+ ifdef CONFIG_SPL

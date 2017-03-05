@@ -1,0 +1,16 @@
+diff --git a/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi b/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi
+index dc9fad5..2649d12 100644
+--- a/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi
+@@ -58,6 +58,11 @@
+ 		linux,rc-map-name = "rc-rc6-mce";
+ 	};
+ 
++  v4l2_out {
++    compatible = "fsl,mxc_v4l2_output";
++    status = "okay";
++  };
++
+ 	pwmleds {
+ 		compatible = "pwm-leds";
+ 		pinctrl-names = "default";
