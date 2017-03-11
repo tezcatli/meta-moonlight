@@ -2,4 +2,4 @@
 
 IMAGE_INSTALL += " moonlight-embedded "
 
-TOOLCHAIN_TARGET_TASK += " alsa-lib-dev libopus-dev libevdev-dev pulseaudio imx-vpu-dev libsdl2-dev kernel-dev curl-dev enet-dev v4l-utils kernel-dev linux-xbian-imx-soc-headers "
+TOOLCHAIN_TARGET_TASK += " alsa-lib-dev libopus-dev libevdev-dev pulseaudio imx-vpu-dev libsdl2-dev kernel-dev curl-dev enet-dev v4l-utils kernel-dev linux-fslc-imx-soc-headers "

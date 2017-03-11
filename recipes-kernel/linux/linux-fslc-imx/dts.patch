@@ -1,0 +1,77 @@
+diff --git a/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi b/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi
+index 0acaeab..e502905 100644
+--- a/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-cubox-i.dtsi
+@@ -47,6 +47,33 @@
+ #include <dt-bindings/gpio/gpio.h>
+ 
+ / {
++  aliases {
++    mmc0 = &usdhc2;
++    mmc1 = &usdhc1;
++    mxcfb0 = &mxcfb1;
++  };
++
++  v4l2_out {
++    compatible = "fsl,mxc_v4l2_output";
++    status = "okay";
++  };
++
++  mxcfb1: fb@0 {
++    compatible = "fsl,mxc_sdc_fb";
++    disp_dev = "hdmi";
++    interface_pix_fmt = "RGB24";
++    mode_str ="1920x1080M@60";
++    default_bpp = <32>;
++    int_clk = <0>;
++    late_init = <0>;
++    status = "okay";
++  };
++
++   v4l2_out {
++    compatible = "fsl,mxc_v4l2_output";
++    status = "okay";
++  };
++
+ 	ir_recv: ir-receiver {
+ 		compatible = "gpio-ir-receiver";
+ 		gpios = <&gpio3 9 1>;
+@@ -122,11 +149,38 @@
+ 	};
+ };
+ 
++&hdmi_core {
++	ipu_id = <0>;
++	disp_id = <0>;
++	status = "okay";
++};
++
++&hdmi_video {
++	fsl,phy_reg_vlev = <0x0294>;
++	fsl,phy_reg_cksymtx = <0x800d>;
++	status = "okay";
++};
++
++&hdmi_audio {
++	status = "okay";
++};
++
++&hdmi_cec {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_cubox_i_hdmi>;
++	status = "okay";
++};
++
+ &i2c2 {
+ 	clock-frequency = <100000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_cubox_i_i2c2>;
+ 	status = "okay";
++
++  ddc: imx6_hdmi_i2c@50 {
++    compatible = "fsl,imx6-hdmi-i2c";
++    reg = <0x50>;
++  };
+ };
+ 
+ &i2c3 {

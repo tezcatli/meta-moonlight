@@ -1,0 +1,12 @@
+diff --git a/arch/arm/mach-imx/Makefile b/arch/arm/mach-imx/Makefile
+index c7d400b..b53704f 100644
+--- a/arch/arm/mach-imx/Makefile
++++ b/arch/arm/mach-imx/Makefile
+@@ -39,6 +39,7 @@ AFLAGS_imx6ul_low_power_idle.o :=-Wa,-march=armv7-a
+ obj-$(CONFIG_SOC_IMX6UL) += cpuidle-imx6ul.o imx6ul_low_power_idle.o
+ AFLAGS_imx6ull_low_power_idle.o :=-Wa,-march=armv7-a
+ obj-$(CONFIG_SOC_IMX6ULL) += imx6ull_low_power_idle.o
++obj-$(CONFIG_SOC_IMX6UL) += imx6ull_low_power_idle.o
+ AFLAGS_imx7d_low_power_idle.o :=-Wa,-march=armv7-a
+ obj-$(CONFIG_SOC_IMX7D) += cpuidle-imx7d.o imx7d_low_power_idle.o
+ endif
