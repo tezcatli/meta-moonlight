@@ -1,0 +1,7 @@
+################################################################################
+# udev rules file for loading brcmfmac_sdio-firmware
+################################################################################
+
+SUBSYSTEM=="sdio", ATTR{vendor}=="0x02d0", ATTR{device}=="0x4329", KERNEL=="*1", ACTION=="add", RUN="/etc/init.d/patchram bcm4329"
+SUBSYSTEM=="sdio", ATTR{vendor}=="0x02d0", ATTR{device}=="0x4330", KERNEL=="*1", ACTION=="add", RUN="/etc/init.d/patchram bcm4330"
+

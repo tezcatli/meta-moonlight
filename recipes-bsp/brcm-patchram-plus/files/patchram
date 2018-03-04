@@ -1,0 +1,17 @@
+#!/bin/sh
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DESC=patchram
+
+DAEMON=/usr/bin/brcm_patchram_plus
+OPTIONS="--patchram /lib/firmware/brcm/$1.hcd --baudrate 3000000 --use_baudrate_for_download /dev/ttymxc3 --enable_hci --no2bytes --tosleep=50000"
+
+SSD_OPTIONS="--oknodo --quiet -n brcm_patchram_plus --exec $DAEMON -- $OPTIONS"
+
+set -e
+
+start-stop-daemon --start --background $SSD_OPTIONS
+
+exit 0
+
+# vim:noet
